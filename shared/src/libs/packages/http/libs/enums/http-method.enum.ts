@@ -4,8 +4,6 @@ const HttpMethod = {
   PUT: 'PUT',
   PATCH: 'PATCH',
   DELETE: 'DELETE',
-};
-
-type HttpMethod = (typeof HttpMethod)[keyof typeof HttpMethod];
+} as const;
 
 export { HttpMethod };

@@ -19,9 +19,13 @@ type Constructor = {
 
 class ServerApp {
   private config: IConfig;
+
   private logger: ILogger;
+
   private app: Express;
+
   private apis: IServerAppApi[];
+
   private db: IDatabase;
 
   public constructor({ config, logger, apis, db }: Constructor) {
@@ -34,7 +38,9 @@ class ServerApp {
 
   public async init(): Promise<void> {
     this.initMiddlewares();
+
     this.initRoutes();
+
     this.db.connect();
 
     const host = this.config.ENV.APP.HOST;

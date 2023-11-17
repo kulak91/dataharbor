@@ -1,37 +1,31 @@
-import './App.css';
+import './app.css';
 
 import type { FC } from 'react';
-import { useState } from 'react';
-
-import viteLogo from '/vite.svg';
-
-import reactLogo from './assets/react.svg';
 
 const App: FC = () => {
-  const [count, setCount] = useState(0);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="container">
+      <div className="form-container">
+        <div className="form-box">
+          <form>
+            <input type="email" placeholder="Email" />
+            <input type="password" placeholder="Password" />
+            <button type="submit">Sign In</button>
+          </form>
+          <p>New to us? <a  className='form-link' href="#">Register</a></p>
+        </div>
+        <div className="form-box">
+          <form>
+            <input type="email" placeholder="Email" />
+            <input type="password" placeholder="Password" />
+            <button type="submit">Sign Up</button>
+          </form>
+          <p>Already have an account? <a className='form-link' href="#">Sign in</a></p>
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={(): void => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    </div>
     </>
   );
 };
