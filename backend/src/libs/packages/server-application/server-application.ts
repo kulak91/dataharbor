@@ -8,7 +8,6 @@ import { ServerAppApi } from './server-app-api.js';
 
 const apiV1 = new ServerAppApi(
   'v1',
-  config,
   ...authController.routes,
 );
 const app = new ServerApp({
