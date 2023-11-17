@@ -1,0 +1,13 @@
+env:
+  browser: true
+
+settings:
+  react:
+    version: 'detect'
+
+parserOptions:
+  project:
+    - ./tsconfig.json
+
+extends:
+  - ../.eslintrc.yml

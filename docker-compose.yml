@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  postgres:
+    container_name: dat-postgres
+    image: 'postgres:latest'
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: dataharbor
+      POSTGRES_USER: student
+      POSTGRES_PASSWORD: password
+    restart: on-failure:3
