@@ -1,4 +1,3 @@
-import { userSignInValidationSchema } from 'shared/build/index.js';
 
 import { ApiPath } from '~/libs/enums/enums.js';
 import { Controller } from '~/libs/packages/controller/controller.package.js';
@@ -8,6 +7,8 @@ import type {
 } from '~/libs/packages/controller/libs/types/types.js';
 import { HttpCode, HttpMethod } from '~/libs/packages/http/http.js';
 import type { ILogger } from '~/libs/packages/logger/logger.js';
+import type { UserSignInRequestDto  } from '~/packages/users/users.js';
+import { userSignInValidationSchema } from '~/packages/users/users.js';
 
 import { AuthApiPath } from './libs/enums/enums.js';
 
@@ -24,7 +25,7 @@ class AuthController extends Controller {
       handler: (options) => {
         return this.signIn(
           options as ApiHandlerOptions<{
-            body: { email: string; password: string };
+            body: UserSignInRequestDto
           }>,
         );
       },
@@ -32,12 +33,12 @@ class AuthController extends Controller {
   }
 
   private async signIn(
-    options: ApiHandlerOptions<{ body: { email: string; password: string } }>,
+    options: ApiHandlerOptions<{ body: UserSignInRequestDto }>,
   ): Promise<ApiHandlerResponse<{ token: string }>> {
     console.log(options);
     return {
       status: HttpCode.OK,
-      payload: { token: 'hey you' },
+      payload: { token: 'To-be-continued' },
     };
   }
 }
