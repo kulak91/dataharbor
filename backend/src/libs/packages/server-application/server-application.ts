@@ -6,10 +6,7 @@ import { authController } from '~/packages/auth/auth.js';
 import { ServerApp } from './server-app.js';
 import { ServerAppApi } from './server-app-api.js';
 
-const apiV1 = new ServerAppApi(
-  'v1',
-  ...authController.routes,
-);
+const apiV1 = new ServerAppApi('v1', ...authController.routes);
 const app = new ServerApp({
   config,
   logger,

@@ -1,4 +1,4 @@
-import type { Dialect,Options  } from 'sequelize';
+import type { Dialect, Options } from 'sequelize';
 import { Sequelize } from 'sequelize';
 
 import type { IConfig } from '~/libs/packages/config/config.js';
@@ -15,13 +15,16 @@ class Database {
     this.config = config;
     this.logger = logger;
 
-    this.client = new Sequelize(this.config.ENV.DB.CONNECTION_STRING, this.dbConfig);
+    this.client = new Sequelize(
+      this.config.ENV.DB.CONNECTION_STRING,
+      this.dbConfig,
+    );
   }
 
   public async connect(): Promise<void> {
-      await this.client.authenticate();
+    await this.client.authenticate();
 
-      this.logger.info('Database connected successfully.');
+    this.logger.info('Database connected successfully.');
   }
 
   private get dbConfig(): Options {
@@ -30,10 +33,9 @@ class Database {
       pool: {
         max: this.config.ENV.DB.POOL_MAX,
         min: this.config.ENV.DB.POOL_MIN,
-      }
+      },
     };
   }
-
 }
 
 export { Database };

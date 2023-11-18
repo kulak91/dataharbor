@@ -10,5 +10,8 @@
     "lint:type": "npx tsc --noEmit",
     "lint:js": "npx eslint \"src/**/*.ts\"",
     "build": "tsc && tsc-alias"
+  },
+  "dependencies": {
+    "joi": "17.11.0"
   }
 }

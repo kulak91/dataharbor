@@ -3,12 +3,9 @@ import convict, { type Config as TConfig } from 'convict';
 import { AppEnvironment } from '~/libs/enums/enums.js';
 
 import { type IConfig } from './libs/interfaces/interfaces.js';
-import {
-  type EnvironmentSchema,
-} from './libs/types/types.js';
+import { type EnvironmentSchema } from './libs/types/types.js';
 
 class Config implements IConfig {
-
   public ENV: EnvironmentSchema;
 
   public constructor() {
@@ -20,7 +17,6 @@ class Config implements IConfig {
     this.ENV = this.envSchema.getProperties();
 
     console.log('.env file found and successfully parsed!', this.ENV);
-
   }
 
   private get envSchema(): TConfig<EnvironmentSchema> {
@@ -91,11 +87,10 @@ class Config implements IConfig {
           format: String,
           env: 'CLIENT_PROD',
           default: null,
-        }
-      }
+        },
+      },
     });
   }
-
 }
 
 export { Config };

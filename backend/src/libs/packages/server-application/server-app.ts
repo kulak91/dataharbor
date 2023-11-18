@@ -49,7 +49,6 @@ class ServerApp {
     this.app.listen({ port, host }, () => {
       this.logger.info(`Server is running on ${host}:${port}`);
     });
-
   }
 
   public addRoute(parameters: AppRouteParameters): void {
@@ -76,9 +75,18 @@ class ServerApp {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     // this.app.use(express.static())
-    this.app.use(cors({ origin: this.config.ENV.CLIENT[this.config.ENV.APP.ENVIRONMENT], methods: [HttpMethod.DELETE, HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT] }));
+    this.app.use(
+      cors({
+        origin: this.config.ENV.CLIENT[this.config.ENV.APP.ENVIRONMENT],
+        methods: [
+          HttpMethod.DELETE,
+          HttpMethod.GET,
+          HttpMethod.POST,
+          HttpMethod.PUT,
+        ],
+      }),
+    );
   }
-
 }
 
 export { ServerApp };

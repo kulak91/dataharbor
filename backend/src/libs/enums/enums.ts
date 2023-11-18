@@ -1,4 +1,1 @@
-export {
-  ApiPath,
-  AppEnvironment,
-} from 'shared/build/index.js';
+export { ApiPath, AppEnvironment } from 'shared/build/index.js';

@@ -11,3 +11,10 @@ parserOptions:
 
 extends:
   - ../.eslintrc.yml
+
+overrides:
+  - files:
+      - vite.config.ts
+    rules:
+      import/no-default-export:
+        - off
