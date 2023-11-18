@@ -1,10 +1,11 @@
 import cors from 'cors';
-import express, { type Express } from 'express';
+import express, { type Express, type NextFunction , type Request, type Response } from 'express';
+import { validate,ValidationError } from 'express-validation';
 
 import type { IConfig } from '~/libs/packages/config/config.js';
 import type { IDatabase } from '~/libs/packages/database/database.js';
 
-import { HttpMethod } from '../http/http.js';
+import { HttpCode, HttpMethod } from '../http/http.js';
 import type { ILogger } from '../logger/logger.js';
 import { formatHttpMethod } from './libs/helpers/helpers.js';
 import type { IServerAppApi } from './libs/interfaces/interfaces.js';
@@ -38,8 +39,8 @@ class ServerApp {
 
   public async init(): Promise<void> {
     this.initMiddlewares();
-
     this.initRoutes();
+    this.initErrorHandler();
 
     this.db.connect();
 
@@ -52,9 +53,9 @@ class ServerApp {
   }
 
   public addRoute(parameters: AppRouteParameters): void {
-    const { path, method, handler } = parameters;
+    const { path, method, handler, validation } = parameters;
 
-    this.app[formatHttpMethod(method)](path, handler);
+    this.app[formatHttpMethod(method)](path, validation && validate(validation, {}, {}), handler);
 
     this.logger.info(`Route: ${method} ${path} is registered`);
   }
@@ -86,6 +87,16 @@ class ServerApp {
         ],
       }),
     );
+  }
+
+  private initErrorHandler(): void {
+    this.app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
+      if (err instanceof ValidationError) {
+        return res.status(err.statusCode).json(err);
+      }
+
+      return res.status(HttpCode.INTERNAL_SERVER_ERROR).json(err);
+    });
   }
 }
 

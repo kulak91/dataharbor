@@ -1,3 +1,5 @@
+import { userSignInValidationSchema } from 'shared/build/index.js';
+
 import { ApiPath } from '~/libs/enums/enums.js';
 import { Controller } from '~/libs/packages/controller/controller.package.js';
 import type {
@@ -16,6 +18,9 @@ class AuthController extends Controller {
     this.addRoute({
       path: AuthApiPath.SIGN_IN,
       method: HttpMethod.POST,
+      validation: {
+        body: userSignInValidationSchema,
+      },
       handler: (options) => {
         return this.signIn(
           options as ApiHandlerOptions<{

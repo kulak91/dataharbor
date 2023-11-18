@@ -8,6 +8,7 @@ export {
   ApplicationError,
   AuthError,
   HttpError,
+  ValidationError,
 } from './libs/exceptions/exceptions.js';
 export { configureString } from './libs/helpers/helpers.js';
 export { type IConfig } from './libs/packages/config/config.js';
