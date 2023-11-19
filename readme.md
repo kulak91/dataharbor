@@ -17,7 +17,7 @@ Use **Node 20** for Dataharbor startup to ensure proper loading of environment v
 
 ### How to run
 
-1. Select correct node version: **nvm use 20**
+1. Select correct node version: `nvm use 20`
 2. Copy env files: `cp ./backend/.env.example ./backend/.env && cp ./frontend/.env.example && ./frontend/.env`
 3. Install dependencies: `npm i`
 4. Run database: `docker compose up -d`
