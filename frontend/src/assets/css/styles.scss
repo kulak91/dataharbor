@@ -5,7 +5,7 @@
 :root {
   font-family: Wotfard, Arial, Helvetica, sans-serif;
   line-height: 1.5;
-  font-weight: 400;
+  // font-weight: 400;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
@@ -43,4 +43,36 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0 auto;
+  position: relative;
+  font-family: "Wotfard", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
 }

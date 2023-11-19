@@ -9,12 +9,14 @@ import {
 import { AppRoute } from '~/libs/enums/enums.js';
 import { Auth } from '~/pages/auth/auth.js';
 import { Dashboard } from '~/pages/dashboard/dashboard.js';
+import { ErrorPage } from '~/pages/error/error.js';
 import { Settings } from '~/pages/settings/settings.js';
 
 const routes: RouteObject[] = [
   {
     path: AppRoute.ROOT,
     element: <App />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: AppRoute.ROOT,
