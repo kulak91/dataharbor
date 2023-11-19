@@ -8,6 +8,7 @@ import express, {
 } from 'express';
 import { validate, ValidationError } from 'express-validation';
 
+import { AppEnvironment } from '~/libs/enums/enums.js';
 import type { IConfig } from '~/libs/packages/config/config.js';
 import type { IDatabase } from '~/libs/packages/database/database.js';
 
@@ -86,8 +87,16 @@ class ServerApp {
   private initMiddlewares(): void {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
-    // this.app.use(express.static())
-    this.app.use(
+
+    this.initCors();
+  }
+
+  private initCors(): void {
+    if (this.config.ENV.APP.ENVIRONMENT === AppEnvironment.PRODUCTION){
+      return;
+    }
+
+     this.app.use(
       cors({
         origin: this.config.ENV.CLIENT[this.config.ENV.APP.ENVIRONMENT],
         methods: [
