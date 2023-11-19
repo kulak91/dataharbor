@@ -2,7 +2,7 @@
 
 ## Important Note on Environment Setup
 
-**It is critical to use Node 20 when starting Dataharbor.** Failing to do so will result in the environment variables not being loaded properly, which can lead to unexpected behavior or errors. Ensure that you configure your setup accordingly.
+Use **Node 20** for Dataharbor startup to ensure proper loading of environment variables and avoid errors or unexpected behavior
 
 ### Frontend
 
@@ -21,5 +21,5 @@
 2. Copy env files: `cp ./backend/.env.example ./backend/.env && cp ./frontend/.env.example && ./frontend/.env`
 3. Install dependencies: `npm i`
 4. Run database: `docker compose up -d`
-5. Run backend: `npm run dev -w backend`
-6. Run frontend: `npm run dev -w frontend`
+5. Run backend: `npm run dev -w backend` (`node -v` output should be >=20)
+6. Run frontend: `npm run dev -w frontend` (`node -v` output should be >=20)
