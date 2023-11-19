@@ -1,18 +1,18 @@
-import './index.css';
+// import './index.css';
 import 'reset-css';
+import '~/assets/css/styles.scss';
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 
+import { RouterProvider } from '~/libs/components/components.js';
 import { store } from '~/libs/packages/store/store.js';
-
-import { App } from './app.js';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Provider store={store.instance}>
-      <App />
+      <RouterProvider />
     </Provider>
   </React.StrictMode>,
 );

@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.logout {
+  margin-left: auto;
+}
+
+.link {
+  color: var(--green-300);
+};
+
+.link:hover {
+  color: var(--green-500);
+}
+
+.activeLink {
+  text-decoration: underline;
+}
