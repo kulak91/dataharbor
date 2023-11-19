@@ -21,17 +21,18 @@ const routes: RouteObject[] = [
         element: <ProtectedRouteLayout />,
         children: [
           {
-            element: <NavigationMenuWrapper/>,
-            children: [{
-              path: AppRoute.ROOT,
-              element: <Dashboard />,
-            },
-            {
-              path: AppRoute.SETTINGS,
-              element: <Settings />,
-            },
-          ]
-          }
+            element: <NavigationMenuWrapper />,
+            children: [
+              {
+                path: AppRoute.ROOT,
+                element: <Dashboard />,
+              },
+              {
+                path: AppRoute.SETTINGS,
+                element: <Settings />,
+              },
+            ],
+          },
         ],
       },
       {

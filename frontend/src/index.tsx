@@ -1,4 +1,3 @@
-// import './index.css';
 import 'reset-css';
 import '~/assets/css/styles.scss';
 

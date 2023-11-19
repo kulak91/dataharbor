@@ -1,5 +1,3 @@
-import './main.css';
-
 import { type FC, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 

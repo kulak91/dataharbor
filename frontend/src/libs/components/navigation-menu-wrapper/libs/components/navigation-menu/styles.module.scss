@@ -1,9 +1,13 @@
 .container {
   display: flex;
   justify-content: center;
-  gap: 10px;
   align-items: center;
-  margin-bottom: 10px;
+  padding: 15px;
+}
+
+.nav-wrapper {
+  gap: 15px;
+  display: flex;
 }
 
 .logout {
@@ -12,12 +16,12 @@
 
 .link {
   color: var(--green-300);
-};
+}
 
 .link:hover {
   color: var(--green-500);
 }
 
-.activeLink {
+.active-link {
   text-decoration: underline;
 }

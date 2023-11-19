@@ -15,14 +15,16 @@ const NAVIGATION_ROUTES: NavRoute[] = [
   {
     name: 'Dashboard',
     path: AppRoute.ROOT,
-  }
+  },
 ];
 
 const NavigationMenuWrapper: FC = () => {
   return (
     <div className={styles['app']}>
       <NavigationMenu routes={NAVIGATION_ROUTES} />
-      <main className={styles['body']}><Outlet /></main>
+      <main className={styles['body']}>
+        <Outlet />
+      </main>
     </div>
   );
 };

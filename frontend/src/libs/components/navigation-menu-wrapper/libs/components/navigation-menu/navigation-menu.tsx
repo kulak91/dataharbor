@@ -5,27 +5,40 @@ import { getValidClassNames } from '~/libs/helpers/helpers.js';
 import { useAppDispatch } from '~/libs/hooks/hooks.js';
 import { actions as authActions } from '~/slices/auth/auth.js';
 
-  import type { NavRoute } from '../../types/types';
-  import styles from './styles.module.scss';
+import type { NavRoute } from '../../types/types';
+import styles from './styles.module.scss';
 
-  type Props = {
-    routes: NavRoute[];
-  };
+type Props = {
+  routes: NavRoute[];
+};
 
-  const NavigationMenu: FC<Props> = ({ routes }) => {
+const NavigationMenu: FC<Props> = ({ routes }) => {
   const dispatch = useAppDispatch();
 
-  const handleSignOut = ():void => {
-
+  const handleSignOut = (): void => {
     void dispatch(authActions.signOut());
   };
 
   return (
     <nav className={styles['container']}>
+      <div className={styles['nav-wrapper']}>
+
       {routes.map((route) => (
-        <NavLink key={route.path} to={route.path} title={route.name} className={({ isActive }): string => getValidClassNames(styles['link'], isActive && styles['activeLink']) }>{route.name}</NavLink>
+        <NavLink
+        key={route.path}
+        to={route.path}
+        title={route.name}
+        className={({ isActive }): string =>
+        getValidClassNames(styles['link'], isActive && styles['active-link'])
+      }
+      >
+          {route.name}
+        </NavLink>
       ))}
-      <button className={styles['logout']} onClick={handleSignOut}>Logout</button>
+      </div>
+      <button className={styles['logout']} onClick={handleSignOut}>
+        Logout
+      </button>
     </nav>
   );
 };
