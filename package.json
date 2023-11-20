@@ -29,7 +29,7 @@
   "devDependencies": {
     "@commitlint/cli": "18.2.0",
     "@ls-lint/ls-lint": "1.11.2",
-    "@typescript-eslint/eslint-plugin": "5.48.1",
+    "@typescript-eslint/eslint-plugin": "6.12.0",
     "@typescript-eslint/parser": "6.11.0",
     "editorconfig-checker": "5.0.1",
     "eslint": "8.31.0",
