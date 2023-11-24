@@ -5,7 +5,7 @@ const HttpCode = {
   INTERNAL_SERVER_ERROR: 500,
   UNAUTHORIZED: 401,
   NOT_FOUND: 404,
-  BAD_REQUEST: 400
+  BAD_REQUEST: 400,
 } as const;
 
 export { HttpCode };

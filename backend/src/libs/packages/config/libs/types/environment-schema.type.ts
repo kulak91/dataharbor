@@ -19,7 +19,7 @@ type EnvironmentSchema = {
   CLIENT: {
     development: string;
     production: string;
-  }
+  };
 };
 
 export { type EnvironmentSchema };

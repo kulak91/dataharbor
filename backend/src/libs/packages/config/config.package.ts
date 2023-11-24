@@ -3,24 +3,24 @@ import convict, { type Config as TConfig } from 'convict';
 import { AppEnvironment } from '~/libs/enums/enums.js';
 
 import { type IConfig } from './libs/interfaces/interfaces.js';
-import {
-  type EnvironmentSchema,
-} from './libs/types/types.js';
+import { type EnvironmentSchema } from './libs/types/types.js';
+import { type ILogger } from '~/libs/packages/logger/logger.js';
 
 class Config implements IConfig {
-
   public ENV: EnvironmentSchema;
+  private logger: ILogger;
 
-  public constructor() {
+  public constructor(logger: ILogger) {
+    this.logger = logger;
+
     this.envSchema.load({});
     this.envSchema.validate({
       allowed: 'strict',
-      output: (message) => console.log(message),
+      output: (message) => this.logger.info(message),
     });
     this.ENV = this.envSchema.getProperties();
 
-    console.log('.env file found and successfully parsed!', this.ENV);
-
+    this.logger.info('.env file successfully parsed.');
   }
 
   private get envSchema(): TConfig<EnvironmentSchema> {
@@ -91,11 +91,10 @@ class Config implements IConfig {
           format: String,
           env: 'CLIENT_PROD',
           default: null,
-        }
-      }
+        },
+      },
     });
   }
-
 }
 
 export { Config };

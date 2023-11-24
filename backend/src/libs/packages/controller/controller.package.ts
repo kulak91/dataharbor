@@ -4,7 +4,11 @@ import type { AppRouteParameters } from '~/libs/packages/server-application/libs
 
 import type { ILogger } from '../logger/logger.js';
 import type { IController } from './libs/interfaces/interfaces.js';
-import type { ApiHandler, ApiHandlerOptions,ControllerRouteParameters } from './libs/types/types.js';
+import type {
+  ApiHandler,
+  ApiHandlerOptions,
+  ControllerRouteParameters,
+} from './libs/types/types.js';
 
 class Controller implements IController {
   private apiUrl: string;
@@ -30,7 +34,11 @@ class Controller implements IController {
     });
   }
 
-  private async mapHandler(handler: ApiHandler, req: Request, res: Response): Promise<void> {
+  private async mapHandler(
+    handler: ApiHandler,
+    req: Request,
+    res: Response,
+  ): Promise<void> {
     this.logger.info(`${req.method} on ${req.url}`);
 
     const handlerOptions = this.mapRequest(req);
@@ -46,7 +54,7 @@ class Controller implements IController {
       body,
       query,
       params,
-      headers
+      headers,
     };
   }
 }

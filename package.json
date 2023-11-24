@@ -20,7 +20,6 @@
     "node": "20.x.x",
     "npm": "10.x.x"
   },
-  "author": "Kulakov Dmytro",
   "license": "ISC",
   "workspaces": [
     "backend",
@@ -30,7 +29,8 @@
   "devDependencies": {
     "@commitlint/cli": "18.2.0",
     "@ls-lint/ls-lint": "1.11.2",
-    "@typescript-eslint/eslint-plugin": "5.48.1",
+    "@typescript-eslint/eslint-plugin": "6.12.0",
+    "@typescript-eslint/parser": "6.11.0",
     "editorconfig-checker": "5.0.1",
     "eslint": "8.31.0",
     "eslint-plugin-import": "2.27.4",
@@ -42,7 +42,7 @@
     "typescript": "5.2.2"
   },
   "simple-git-hooks": {
-    "pre-commit": "npx lint-staged",
+    "pre-commit": "npx lint-staged && npm run lint:type",
     "commit-msg": "npx commitlint --edit $1"
   }
 }
