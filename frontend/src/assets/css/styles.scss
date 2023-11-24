@@ -5,11 +5,9 @@
 :root {
   font-family: Wotfard, Arial, Helvetica, sans-serif;
   line-height: 1.5;
-  // font-weight: 400;
-
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: var(--white-aplha-80);
+  background-color: var(--gray-500);
   background-image: url("/img/main-bg.png");
   background-repeat: no-repeat;
   background-size: cover;
@@ -33,7 +31,7 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: var(--gray-700);
   cursor: pointer;
   transition: border-color 0.25s;
 }
