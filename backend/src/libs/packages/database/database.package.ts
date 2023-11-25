@@ -34,6 +34,10 @@ class Database {
         max: this.config.ENV.DB.POOL_MAX,
         min: this.config.ENV.DB.POOL_MIN,
       },
+      define: {
+        timestamps: true,
+        underscored: true,
+      },
     };
   }
 }

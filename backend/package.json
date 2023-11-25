@@ -3,13 +3,20 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "build": "tsc && tsc-alias",
     "lint:type": "npx tsc --noEmit",
     "lint:js": "npx eslint \"src/**/*.ts\"",
     "dev": "nodemon --env-file .env -e ts,json --exec \"node --loader ts-paths-esm-loader\" src/index.ts",
     "start": "node --env-file .env ./src/index.js",
-    "migrate:help": "node --env-file .env --loader ts-paths-esm-loader ./migrate.ts --help",
-    "migrate:up": "node --env-file .env --loader ts-paths-esm-loader ./migrate.ts up",
-    "migrate:make": "node --env-file .env --loader ts-paths-esm-loader ./migrate.ts create --name new-migration.ts"
+    "db:migrate:help": "node --env-file .env --loader ts-paths-esm-loader ./src/db/migrate.ts --help",
+    "db:migrate:down": "node --env-file .env --loader ts-paths-esm-loader ./src/db/migrate.ts down",
+    "db:migrate:up": "node --env-file .env --loader ts-paths-esm-loader ./src/db/migrate.ts up",
+    "db:migrate:executed": "node --env-file .env --loader ts-paths-esm-loader ./src/db/migrate.ts executed",
+    "db:migrate:make": "node --env-file .env --loader ts-paths-esm-loader ./src/db/migrate.ts create --name new-migration.ts",
+    "db:seed:make": "node --env-file .env --loader ts-paths-esm-loader ./src/db/seed.ts create --name new-seed.ts",
+    "db:seed:up": "node --env-file .env --loader ts-paths-esm-loader ./src/db/seed.ts up",
+    "db:seed:down": "node --env-file .env --loader ts-paths-esm-loader ./src/db/seed.ts down",
+    "db:seed:executed": "node --env-file .env --loader ts-paths-esm-loader ./src/db/seed.ts executed"
   },
   "engines": {
     "node": "20.x.x",

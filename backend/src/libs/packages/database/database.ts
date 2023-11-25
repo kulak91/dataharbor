@@ -2,14 +2,18 @@ import { config } from '~/libs/packages/config/config.js';
 import { logger } from '~/libs/packages/logger/logger.js';
 
 import { Database } from './database.package.js';
-import { Migrator } from './migrator.js';
+import { DatabaseUtilityFactory } from './database-utility-factory.js';
 
 const db = new Database(config, logger);
 
-const migrator = new Migrator(db.client);
+const utilityFactory = new DatabaseUtilityFactory(db.client, logger);
 
-type Migration = typeof migrator.client._types.migration;
+const migrator = utilityFactory.createMigrator();
+const seeder = utilityFactory.createSeeder();
 
-export { db, migrator };
+type Migration = typeof migrator._types.migration;
+
+export { db, migrator, seeder };
 export type { IDatabase } from './libs/interfaces/interfaces.js';
 export type { Migration };
+export { DatabaseTableName } from './libs/enums/enums.js';

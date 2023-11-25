@@ -1,6 +1,6 @@
 {
   "extends": "../tsconfig.json",
-  "include": ["src", "migrate.ts"],
+  "include": ["src"],
   "exclude": ["node_modules"],
   "compilerOptions": {
     "target": "ESNext",
