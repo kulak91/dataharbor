@@ -9,7 +9,7 @@ class Database {
 
   private logger: ILogger;
 
-  private client: Sequelize;
+  public client: Sequelize;
 
   public constructor(config: IConfig, logger: ILogger) {
     this.config = config;

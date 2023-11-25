@@ -1,10 +1,10 @@
 import convict, { type Config as TConfig } from 'convict';
 
 import { AppEnvironment } from '~/libs/enums/enums.js';
+import { type ILogger } from '~/libs/packages/logger/logger.js';
 
 import { type IConfig } from './libs/interfaces/interfaces.js';
 import { type EnvironmentSchema } from './libs/types/types.js';
-import { type ILogger } from '~/libs/packages/logger/logger.js';
 
 class Config implements IConfig {
   public ENV: EnvironmentSchema;

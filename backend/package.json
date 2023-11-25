@@ -6,7 +6,10 @@
     "lint:type": "npx tsc --noEmit",
     "lint:js": "npx eslint \"src/**/*.ts\"",
     "dev": "nodemon --env-file .env -e ts,json --exec \"node --loader ts-paths-esm-loader\" src/index.ts",
-    "start": "node --env-file .env ./src/index.js"
+    "start": "node --env-file .env ./src/index.js",
+    "migrate:help": "node --env-file .env --loader ts-paths-esm-loader ./migrate.ts --help",
+    "migrate:up": "node --env-file .env --loader ts-paths-esm-loader ./migrate.ts up",
+    "migrate:make": "node --env-file .env --loader ts-paths-esm-loader ./migrate.ts create --name new-migration.ts"
   },
   "engines": {
     "node": "20.x.x",
@@ -24,7 +27,8 @@
     "pg-hstore": "2.3.4",
     "pino": "8.16.1",
     "pino-pretty": "10.2.3",
-    "sequelize": "6.35.0"
+    "sequelize": "6.35.0",
+    "umzug": "3.4.0"
   },
   "devDependencies": {
     "@types/bcrypt": "5.0.1",
