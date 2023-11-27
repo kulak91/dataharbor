@@ -1,7 +1,7 @@
-import type { IServerAppApi } from './libs/interfaces/interfaces.js';
+import type { ServerApiDetails } from './libs/interfaces/interfaces.js';
 import type { AppRouteParameters } from './libs/types/app-route-parameters.type.js';
 
-class ServerAppApi implements IServerAppApi {
+class ServerAppApi implements ServerApiDetails {
   public version: string;
 
   public routes: AppRouteParameters[];

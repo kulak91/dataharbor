@@ -1,8 +1,8 @@
 import { type AppRouteParameters } from '../types/app-route-parameters.type.js';
 
-interface IServerApp {
+interface ServerApplication {
   addRoute(parameters: AppRouteParameters): void;
   addRoutes(parameters: AppRouteParameters[]): void;
 }
 
-export { type IServerApp };
+export { type ServerApplication };

@@ -2,7 +2,7 @@ import type { Request, Response } from 'express';
 
 import type { AppRouteParameters } from '~/libs/packages/server-application/libs/types/app-route-parameters.type.js';
 
-import type { ILogger } from '../logger/logger.js';
+import type { LoggerService } from '../logger/logger.js';
 import type { IController } from './libs/interfaces/interfaces.js';
 import type {
   ApiHandler,
@@ -13,11 +13,11 @@ import type {
 class Controller implements IController {
   private apiUrl: string;
 
-  public logger: ILogger;
+  public logger: LoggerService;
 
   public routes: AppRouteParameters[];
 
-  public constructor(logger: ILogger, apiPath: string) {
+  public constructor(logger: LoggerService, apiPath: string) {
     this.apiUrl = apiPath;
     this.logger = logger;
     this.routes = [];

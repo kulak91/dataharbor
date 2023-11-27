@@ -5,7 +5,7 @@ import type {
   ApiHandlerResponse,
 } from '~/libs/packages/controller/libs/types/types.js';
 import { HttpCode, HttpMethod } from '~/libs/packages/http/http.js';
-import type { ILogger } from '~/libs/packages/logger/logger.js';
+import type { LoggerService } from '~/libs/packages/logger/logger.js';
 import type {
   UserAuthResponseDto,
   UserSignInRequestDto,
@@ -18,7 +18,7 @@ import { userSignInValidationSchema } from '~/packages/users/users.js';
 import { AuthApiPath } from './libs/enums/enums.js';
 
 class AuthController extends Controller {
-  public constructor(logger: ILogger) {
+  public constructor(logger: LoggerService) {
     super(logger, ApiPath.AUTH);
 
     this.addRoute({

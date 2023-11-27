@@ -1,4 +1,4 @@
-import { type IConfig as LibraryConfig } from 'shared/build/index.js';
+import { type ConfigSchema as LibraryConfig } from 'shared/build/index.js';
 
 import { type EnvironmentSchema } from './types.js';
 

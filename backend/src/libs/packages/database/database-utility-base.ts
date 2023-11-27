@@ -6,19 +6,19 @@ import type { Sequelize } from 'sequelize';
 import type { UmzugOptions } from 'umzug';
 import { SequelizeStorage } from 'umzug';
 
-import type { ILogger } from '~/libs/packages/logger/logger.js';
+import type { LoggerService } from '~/libs/packages/logger/logger.js';
 
 import type {
-  IDatabaseUtility,
-  IGetConfigOptions,
+  DatabaseConfigurator,
+  MigrationConfigOptions,
 } from './libs/interfaces/interfaces.js';
 
-class DatabaseUtilityBase implements IDatabaseUtility {
+class DatabaseUtilityBase implements DatabaseConfigurator {
   private sequelize: Sequelize;
   private directory: string;
-  private logger: ILogger;
+  private logger: LoggerService;
 
-  public constructor(sequelize: Sequelize, logger: ILogger) {
+  public constructor(sequelize: Sequelize, logger: LoggerService) {
     this.sequelize = sequelize;
     this.logger = logger;
     this.directory = dirname(fileURLToPath(import.meta.url));
@@ -28,7 +28,7 @@ class DatabaseUtilityBase implements IDatabaseUtility {
     migrationsFolder,
     outputPath,
     templateFileName,
-  }: IGetConfigOptions): UmzugOptions<Sequelize> {
+  }: MigrationConfigOptions): UmzugOptions<Sequelize> {
     const _templatePath = join(
       this.directory,
       'libs/templates',

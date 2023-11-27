@@ -3,11 +3,11 @@ type LogFunction = (
   parameters?: Record<string, unknown>,
 ) => void;
 
-interface ILogger {
+interface LoggerService {
   info: LogFunction;
   warn: LogFunction;
   error: LogFunction;
   debug: LogFunction;
 }
 
-export { type ILogger };
+export { type LoggerService };

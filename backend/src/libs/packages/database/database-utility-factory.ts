@@ -1,16 +1,16 @@
 import type { Sequelize } from 'sequelize';
 import { Umzug } from 'umzug';
 
-import type { ILogger } from '~/libs/packages/logger/logger.js';
+import type { LoggerService } from '~/libs/packages/logger/logger.js';
 
 import { DatabaseUtilityBase } from './database-utility-base.js';
-import type { IDatabaseUtilityFactory } from './libs/interfaces/interfaces.js';
+import type { DatabaseConfiguratorFactory } from './libs/interfaces/interfaces.js';
 
 class DatabaseUtilityFactory
   extends DatabaseUtilityBase
-  implements IDatabaseUtilityFactory
+  implements DatabaseConfiguratorFactory
 {
-  public constructor(sequelize: Sequelize, logger: ILogger) {
+  public constructor(sequelize: Sequelize, logger: LoggerService) {
     super(sequelize, logger);
   }
 

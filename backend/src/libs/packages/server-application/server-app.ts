@@ -9,32 +9,35 @@ import express, {
 import { validate, ValidationError } from 'express-validation';
 
 import { AppEnvironment } from '~/libs/enums/enums.js';
-import type { IConfig } from '~/libs/packages/config/config.js';
-import type { IDatabase } from '~/libs/packages/database/database.js';
+import type { ConfigSchema } from '~/libs/packages/config/config.js';
+import type { DatabaseService } from '~/libs/packages/database/database.js';
 
 import { HttpCode, HttpMethod } from '../http/http.js';
-import type { ILogger } from '../logger/logger.js';
+import type { LoggerService } from '../logger/logger.js';
 import { formatHttpMethod } from './libs/helpers/helpers.js';
-import type { IServerAppApi } from './libs/interfaces/interfaces.js';
-import type { AppRouteParameters } from './libs/types/app-route-parameters.type.js';
+import type {
+  ServerApiDetails,
+  ServerApplication,
+} from './libs/interfaces/interfaces.js';
+import type { AppRouteParameters } from './libs/types/types.js';
 
 type Constructor = {
-  config: IConfig;
-  logger: ILogger;
-  apis: IServerAppApi[];
-  db: IDatabase;
+  config: ConfigSchema;
+  logger: LoggerService;
+  apis: ServerApiDetails[];
+  db: DatabaseService;
 };
 
-class ServerApp {
-  private config: IConfig;
+class ServerApp implements ServerApplication {
+  private config: ConfigSchema;
 
-  private logger: ILogger;
+  private logger: LoggerService;
 
   private app: Express;
 
-  private apis: IServerAppApi[];
+  private apis: ServerApiDetails[];
 
-  private db: IDatabase;
+  private db: DatabaseService;
 
   public constructor({ config, logger, apis, db }: Constructor) {
     this.config = config;

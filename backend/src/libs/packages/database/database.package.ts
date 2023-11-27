@@ -1,17 +1,17 @@
 import type { Dialect, Options } from 'sequelize';
 import { Sequelize } from 'sequelize';
 
-import type { IConfig } from '~/libs/packages/config/config.js';
-import type { ILogger } from '~/libs/packages/logger/logger.js';
+import type { ConfigSchema } from '~/libs/packages/config/config.js';
+import type { LoggerService } from '~/libs/packages/logger/logger.js';
 
 class Database {
-  private config: IConfig;
+  private config: ConfigSchema;
 
-  private logger: ILogger;
+  private logger: LoggerService;
 
   public client: Sequelize;
 
-  public constructor(config: IConfig, logger: ILogger) {
+  public constructor(config: ConfigSchema, logger: LoggerService) {
     this.config = config;
     this.logger = logger;
 

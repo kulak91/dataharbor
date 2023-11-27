@@ -1,1 +1,1 @@
-export { type ILogger } from './logger.interface.js';
+export { type LoggerService } from './logger.interface.js';

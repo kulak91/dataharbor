@@ -1,28 +1,28 @@
 import type { Sequelize } from 'sequelize';
 import type { Umzug, UmzugOptions } from 'umzug';
 
-interface IDatabase {
+interface DatabaseService {
   connect: () => void;
 }
 
-interface IGetConfigOptions {
+interface MigrationConfigOptions {
   templateFileName: string;
   outputPath: string;
   migrationsFolder: string;
 }
 
-interface IDatabaseUtility {
-  getConfig: (opts: IGetConfigOptions) => UmzugOptions<Sequelize>;
+interface DatabaseConfigurator {
+  getConfig: (opts: MigrationConfigOptions) => UmzugOptions<Sequelize>;
 }
 
-interface IDatabaseUtilityFactory {
+interface DatabaseConfiguratorFactory {
   createMigrator(): Umzug<Sequelize>;
   createSeeder(): Umzug<Sequelize>;
 }
 
 export type {
-  IDatabase,
-  IDatabaseUtility,
-  IDatabaseUtilityFactory,
-  IGetConfigOptions,
+  DatabaseConfigurator,
+  DatabaseConfiguratorFactory,
+  DatabaseService,
+  MigrationConfigOptions,
 };

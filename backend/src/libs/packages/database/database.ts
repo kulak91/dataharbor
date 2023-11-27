@@ -14,6 +14,6 @@ const seeder = utilityFactory.createSeeder();
 type Migration = typeof migrator._types.migration;
 
 export { db, migrator, seeder };
-export type { IDatabase } from './libs/interfaces/interfaces.js';
+export type { DatabaseService } from './libs/interfaces/interfaces.js';
 export type { Migration };
 export { DatabaseTableName } from './libs/enums/enums.js';

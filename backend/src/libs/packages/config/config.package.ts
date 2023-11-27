@@ -1,16 +1,16 @@
 import convict, { type Config as TConfig } from 'convict';
 
 import { AppEnvironment } from '~/libs/enums/enums.js';
-import { type ILogger } from '~/libs/packages/logger/logger.js';
+import { type LoggerService } from '~/libs/packages/logger/logger.js';
 
-import { type IConfig } from './libs/interfaces/interfaces.js';
+import { type ConfigSchema } from './libs/interfaces/interfaces.js';
 import { type EnvironmentSchema } from './libs/types/types.js';
 
-class Config implements IConfig {
+class Config implements ConfigSchema {
   public ENV: EnvironmentSchema;
-  private logger: ILogger;
+  private logger: LoggerService;
 
-  public constructor(logger: ILogger) {
+  public constructor(logger: LoggerService) {
     this.logger = logger;
 
     this.envSchema.load({});

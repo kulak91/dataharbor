@@ -5,4 +5,4 @@ import { Config } from './config.package.js';
 const config = new Config(logger);
 
 export { config };
-export { type IConfig } from './libs/interfaces/interfaces.js';
+export { type ConfigSchema } from './libs/interfaces/interfaces.js';
