@@ -1,34 +1,44 @@
-import { BaseModel } from '~/libs/packages/database/base.model.js';
-import { DatabaseTableName } from '~/libs/packages/database/database.js';
+import type {
+  CreationOptional,
+  InferAttributes,
+  InferCreationAttributes,
+} from '~/libs/packages/database/database.js';
+import {
+  BaseModel,
+  DatabaseTableName,
+  DataTypes,
+  Model,
+  sequelize,
+} from '~/libs/packages/database/database.js';
 
 import { UserColumnName } from './libs/enums/enums.js';
 
-class UserModel extends BaseModel {
-  public model;
-  public constructor() {
-    super();
-    this.model = this.defineModel(DatabaseTableName.USERS, {
-      [UserColumnName.ID]: {
-        type: this.dataTypes.INTEGER,
-        allowNull: false,
-        primaryKey: true,
-        autoIncrement: true,
-      },
-      [UserColumnName.EMAIL]: {
-        type: this.dataTypes.STRING,
-        unique: true,
-        allowNull: false,
-      },
-      [UserColumnName.PASSWORD_HASH]: {
-        type: this.dataTypes.STRING(60),
-        allowNull: false,
-      },
-      [UserColumnName.PASSWORD_SALT]: {
-        type: this.dataTypes.STRING(60),
-        allowNull: false,
-      },
-    });
-  }
+interface User {
+  email: string;
+  passwordHash: string;
+  passwordSalt: string;
 }
+
+class UserModel extends BaseModel<UserModel> {
+  public email!: string;
+  public passwordHash!: string;
+  public passwordSalt!: string;
+}
+
+UserModel.init(
+  {
+    // id: {
+    //   type: DataTypes.INTEGER,
+    //   primaryKey: true,
+    //   autoIncrement: true,
+    // },
+    email: { type: DataTypes.STRING, unique: true },
+    passwordHash: DataTypes.STRING(60),
+    passwordSalt: DataTypes.STRING(60),
+    // createdAt: DataTypes.DATE,
+    // updatedAt: DataTypes.DATE,
+  },
+  { sequelize, tableName: 'users' },
+);
 
 export { UserModel };

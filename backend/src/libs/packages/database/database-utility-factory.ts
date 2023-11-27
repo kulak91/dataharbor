@@ -1,4 +1,4 @@
-import type { Sequelize } from 'sequelize';
+import type { Sequelize } from '@sequelize/core';
 import { Umzug } from 'umzug';
 
 import type { LoggerService } from '~/libs/packages/logger/logger.js';

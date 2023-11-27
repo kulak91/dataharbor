@@ -1,6 +1,6 @@
 import {
   type Migration,
-  DatabaseTableName,
+  // DatabaseTableName,
 } from '~/libs/packages/database/database.js';
 
 const up: Migration = async ({ context: sequelize }) => {

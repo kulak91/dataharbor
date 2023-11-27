@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import type { Sequelize } from 'sequelize';
+import type { Sequelize } from '@sequelize/core';
 import { SequelizeStorage, Umzug } from 'umzug';
 
 class Migrator {

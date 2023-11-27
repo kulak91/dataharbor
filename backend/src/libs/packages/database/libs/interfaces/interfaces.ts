@@ -1,8 +1,8 @@
-import type { Sequelize } from 'sequelize';
+import type { Sequelize } from '@sequelize/core';
 import type { Umzug, UmzugOptions } from 'umzug';
 
 interface DatabaseService {
-  connect: () => void;
+  init: () => Promise<void>;
 }
 
 interface MigrationConfigOptions {

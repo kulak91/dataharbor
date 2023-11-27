@@ -52,7 +52,7 @@ class ServerApp implements ServerApplication {
     this.initRoutes();
     this.initErrorHandler();
 
-    this.db.connect();
+    await this.db.init();
 
     const host = this.config.ENV.APP.HOST;
     const port = this.config.ENV.APP.PORT;
