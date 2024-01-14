@@ -6,6 +6,7 @@ type EnvironmentSchema = {
     PORT: number;
     HOST: string;
     ENVIRONMENT: ValueOf<typeof AppEnvironment>;
+    PUBLIC_URL: string | null;
   };
   DB: {
     CONNECTION_STRING: string;

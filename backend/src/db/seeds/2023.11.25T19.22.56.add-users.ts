@@ -4,25 +4,30 @@ import {
 } from '~/libs/packages/database/database.js';
 import { UserColumnName } from '~/packages/users/users.js';
 
-const defaultPassword = '12345Qwerty';
-const defaultPasswordSalt = 'salt-me';
+const DefaultUser = {
+  email: 'admin@admin.com',
+  password: '12345Qwerty',
+  salt: 'random-salt',
+  id: 1,
+} as const;
 
 const data = [
   {
-    [UserColumnName.EMAIL]: 'admin@admin.com',
+    [UserColumnName.EMAIL]: DefaultUser.email,
+    [UserColumnName.ID]: DefaultUser.id,
+    [UserColumnName.PASSWORD_HASH]: DefaultUser.password,
+    [UserColumnName.PASSWORD_SALT]: DefaultUser.salt,
   },
 ];
 
 const up: Migration = async ({ context: sequelize }) => {
-  const formData = [];
+  const migrations = [];
 
   for (let i = 0; i < data.length; i += 1) {
     const item = data[i];
 
-    formData.push({
+    migrations.push({
       ...item,
-      [UserColumnName.PASSWORD_HASH]: defaultPassword,
-      [UserColumnName.PASSWORD_SALT]: defaultPasswordSalt,
       [UserColumnName.CREATED_AT]: new Date(),
       [UserColumnName.UPDATED_AT]: new Date(),
     });
@@ -30,7 +35,7 @@ const up: Migration = async ({ context: sequelize }) => {
 
   await sequelize
     .getQueryInterface()
-    .bulkInsert(DatabaseTableName.USERS, formData);
+    .bulkInsert(DatabaseTableName.USERS, migrations);
 };
 
 const down: Migration = async ({ context: sequelize }) => {

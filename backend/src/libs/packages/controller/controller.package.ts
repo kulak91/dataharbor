@@ -49,12 +49,13 @@ class Controller implements IController {
   }
 
   private mapRequest(req: Request): ApiHandlerOptions {
-    const { body, query, params, headers } = req;
+    const { body, query, params, headers, user } = req;
     return {
       body,
       query,
       params,
       headers,
+      user,
     };
   }
 }

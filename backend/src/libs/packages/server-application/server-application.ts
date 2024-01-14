@@ -1,5 +1,6 @@
 import { config } from '~/libs/packages/config/config.js';
 import { db } from '~/libs/packages/database/database.js';
+import { jwt } from '~/libs/packages/jwt/jwt.js';
 import { logger } from '~/libs/packages/logger/logger.js';
 import { authController } from '~/packages/auth/auth.js';
 import { userController } from '~/packages/users/users.js';
@@ -20,3 +21,5 @@ const app = new ServerApp({
 });
 
 export { app };
+export { WHITE_ROUTES } from './libs/constants/constants.js';
+export type { AppRouteParameters, WhiteRoute } from './libs/types/types.js';

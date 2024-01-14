@@ -44,6 +44,13 @@ class Config implements ConfigSchema {
           env: 'HOST',
           default: null,
         },
+        PUBLIC_URL: {
+          doc: 'Deployed Api URL',
+          format: String,
+          env: 'PUBLIC_URL',
+          nullable: true,
+          default: null,
+        },
       },
       DB: {
         CONNECTION_STRING: {

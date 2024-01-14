@@ -5,9 +5,9 @@ import type {
   ApiHandlerResponse,
 } from '~/libs/packages/controller/libs/types/types.js';
 import { HttpCode, HttpMethod } from '~/libs/packages/http/http.js';
+import { jwt } from '~/libs/packages/jwt/jwt.js';
 import type { LoggerService } from '~/libs/packages/logger/logger.js';
 import type {
-  UserAuthResponseDto,
   UserSignInRequestDto,
   UserSignInResponseDto,
   UserSignUpRequestDto,
@@ -60,11 +60,14 @@ class AuthController extends Controller {
   private async signIn(
     options: ApiHandlerOptions<{ body: UserSignInRequestDto }>,
   ): Promise<ApiHandlerResponse<UserSignInResponseDto>> {
+    const token = await jwt.sign({ claim: { userId: 1 } });
     const mockResponse: UserSignUpResponseDto = {
-      token: 'To-be-continued',
+      token: token ?? 'ew.. some error',
       user: {
         createdAt: new Date(),
         email: options.body.email,
+        firstName: 'lol',
+        lastName: 'kek',
         id: 1,
         updatedAt: new Date(),
       },
@@ -86,6 +89,8 @@ class AuthController extends Controller {
         email: options.body.email,
         id: 1,
         updatedAt: new Date(),
+        firstName: 'lol',
+        lastName: 'kek',
       },
     };
 
@@ -96,18 +101,11 @@ class AuthController extends Controller {
   }
 
   private async getAuthenticatedUser(
-    _options: unknown,
+    _options: ApiHandlerOptions,
   ): Promise<ApiHandlerResponse> {
-    const mockUser: UserAuthResponseDto = {
-      createdAt: new Date(),
-      email: 'any-email@gmail.com',
-      id: 1,
-      updatedAt: new Date(),
-    };
-
     return {
       status: HttpCode.OK,
-      payload: mockUser,
+      payload: _options.user,
     };
   }
 }

@@ -1,24 +1,24 @@
 import cors from 'cors';
-import express, {
-  type Express,
-  type NextFunction,
-  type Request,
-  type RequestHandler,
-  type Response,
-} from 'express';
-import { validate, ValidationError } from 'express-validation';
+import express, { type Express, type RequestHandler } from 'express';
+import { validate } from 'express-validation';
 
 import { AppEnvironment } from '~/libs/enums/enums.js';
 import type { ConfigSchema } from '~/libs/packages/config/config.js';
 import type { DatabaseService } from '~/libs/packages/database/database.js';
+import { jwt } from '~/libs/packages/jwt/jwt.js';
+import { userService } from '~/packages/users/users.js';
 
-import { HttpCode, HttpMethod } from '../http/http.js';
+import { HttpMethod } from '../http/http.js';
 import type { LoggerService } from '../logger/logger.js';
 import { formatHttpMethod } from './libs/helpers/helpers.js';
 import type {
   ServerApiDetails,
   ServerApplication,
 } from './libs/interfaces/interfaces.js';
+import {
+  authMiddleware,
+  errorHandlerMiddleware,
+} from './libs/middlewares/middlewares.js';
 import type { AppRouteParameters } from './libs/types/types.js';
 
 type Constructor = {
@@ -90,6 +90,7 @@ class ServerApp implements ServerApplication {
   private initMiddlewares(): void {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
+    this.app.use(authMiddleware({ logger: this.logger, jwt, userService }));
 
     this.initCors();
   }
@@ -113,15 +114,7 @@ class ServerApp implements ServerApplication {
   }
 
   private initErrorHandler(): void {
-    this.app.use(
-      (err: Error, _req: Request, res: Response, _next: NextFunction) => {
-        if (err instanceof ValidationError) {
-          return res.status(err.statusCode).json(err);
-        }
-
-        return res.status(HttpCode.INTERNAL_SERVER_ERROR).json(err);
-      },
-    );
+    this.app.use(errorHandlerMiddleware(this.logger));
   }
 }
 
