@@ -1,10 +1,12 @@
 import {
+  type errors,
   type JWTPayload,
   type JWTVerifyResult,
   jwtVerify,
   SignJWT,
 } from 'jose';
 
+import { AuthError } from '~/libs/exceptions/exceptions.js';
 import { type ConfigSchema } from '~/libs/packages/config/config.js';
 import { type LoggerService } from '~/libs/packages/logger/logger.js';
 
@@ -39,9 +41,14 @@ class JWT implements JWTService {
   public async verify<T extends JWTPayload>(
     token: string,
   ): Promise<JWTVerifyResult<T>['payload']> {
-    const { payload } = await jwtVerify<T>(token, this.secret);
+    try {
+      const { payload } = await jwtVerify<T>(token, this.secret);
 
-    return payload;
+      return payload;
+    } catch (error) {
+      this.logger.error('JWT Error', { error });
+      throw new AuthError({ message: (error as errors.JOSEError).code });
+    }
   }
 
   private get signConfig(): SignJWTConfig {
