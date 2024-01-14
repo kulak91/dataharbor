@@ -1,44 +1,34 @@
-import type {
-  CreationOptional,
-  InferAttributes,
-  InferCreationAttributes,
-} from '~/libs/packages/database/database.js';
 import {
   BaseModel,
-  DatabaseTableName,
   DataTypes,
-  Model,
   sequelize,
 } from '~/libs/packages/database/database.js';
 
-import { UserColumnName } from './libs/enums/enums.js';
+import { UserDetails } from './user-details.model.js';
 
-interface User {
-  email: string;
-  passwordHash: string;
-  passwordSalt: string;
-}
-
-class UserModel extends BaseModel<UserModel> {
+class User extends BaseModel<User> {
   public email!: string;
   public passwordHash!: string;
   public passwordSalt!: string;
+  public details?: UserDetails;
 }
 
-UserModel.init(
+User.init(
   {
-    // id: {
-    //   type: DataTypes.INTEGER,
-    //   primaryKey: true,
-    //   autoIncrement: true,
-    // },
     email: { type: DataTypes.STRING, unique: true },
     passwordHash: DataTypes.STRING(60),
     passwordSalt: DataTypes.STRING(60),
-    // createdAt: DataTypes.DATE,
-    // updatedAt: DataTypes.DATE,
   },
   { sequelize, tableName: 'users' },
 );
 
-export { UserModel };
+User.hasOne(UserDetails, {
+  foreignKey: 'userId',
+  as: 'details',
+});
+
+UserDetails.belongsTo(User, {
+  foreignKey: 'userId',
+});
+
+export { User };

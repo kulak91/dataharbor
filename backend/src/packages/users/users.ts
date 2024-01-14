@@ -1,3 +1,5 @@
+import { db } from '~/libs/packages/database/database.js';
+import { encrypt } from '~/libs/packages/encrypt/encrypt.js';
 import { logger } from '~/libs/packages/logger/logger.js';
 
 import { UserController } from './user.controller.js';
@@ -6,8 +8,12 @@ import { UserRepository } from './user.repository.js';
 import { UserService } from './user.service.js';
 import { UserDetails as UserDetailsModel } from './user-details.model.js';
 
-const userRepository = new UserRepository({ userModel: UserModel });
-const userService = new UserService({ userRepository });
+const userRepository = new UserRepository({
+  userModel: UserModel,
+  userDetailsModel: UserDetailsModel,
+  db,
+});
+const userService = new UserService({ userRepository, encrypt });
 const userController = new UserController(logger);
 
 export { UserColumnName } from './libs/enums/enums.js';

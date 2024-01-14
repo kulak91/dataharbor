@@ -20,6 +20,8 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }) => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
 
   const handleFormSubmit = (e: React.FormEvent): void => {
     e.preventDefault();
@@ -27,7 +29,7 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }) => {
       return;
     }
 
-    void onSubmit({ email, password });
+    void onSubmit({ email, password, firstName, lastName });
   };
 
   return (
@@ -44,6 +46,18 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }) => {
           placeholder="Password"
           value={password}
           onChange={(e): void => setPassword(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="First name"
+          value={firstName}
+          onChange={(e): void => setFirstName(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Last name"
+          value={lastName}
+          onChange={(e): void => setLastName(e.target.value)}
         />
         <button type="submit">{submitText}</button>
 

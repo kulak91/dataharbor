@@ -3,6 +3,7 @@ import type { Umzug, UmzugOptions } from 'umzug';
 
 interface DatabaseService {
   init: () => Promise<void>;
+  client: Sequelize;
 }
 
 interface MigrationConfigOptions {

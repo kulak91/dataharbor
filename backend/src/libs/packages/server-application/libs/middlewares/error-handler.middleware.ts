@@ -28,6 +28,8 @@ const errorHandlerMiddleware =
       return res.status(err.status).send(response);
     }
 
+    logger.error('Unknown error', { err });
+
     return res.status(HttpCode.INTERNAL_SERVER_ERROR).json(err);
   };
 

@@ -1,3 +1,5 @@
+import 'express-async-errors';
+
 import cors from 'cors';
 import express, { type Express, type RequestHandler } from 'express';
 import { validate } from 'express-validation';

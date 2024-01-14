@@ -40,12 +40,10 @@ class Controller implements IController {
     res: Response,
   ): Promise<void> {
     this.logger.info(`${req.method} on ${req.url}`);
-
     const handlerOptions = this.mapRequest(req);
     const { status, payload } = await handler(handlerOptions);
 
     res.status(status).send(payload);
-    return;
   }
 
   private mapRequest(req: Request): ApiHandlerOptions {

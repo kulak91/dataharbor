@@ -27,18 +27,13 @@ class JWT implements JWTService {
     this.secret = new TextEncoder().encode(this.config.ENV.JWT.SECRET_KEY);
   }
 
-  public async sign({ exp, claim }: SignJWTOptions): Promise<string | null> {
-    try {
-      return await new SignJWT(claim)
-        .setProtectedHeader({ alg: this.signConfig.alg })
-        .setIssuedAt()
-        .setIssuer(this.signConfig.issuer)
-        .setExpirationTime(exp ?? this.signConfig.exp)
-        .sign(this.secret);
-    } catch (error) {
-      this.logger.error('JWT sign error:', { error });
-      return null;
-    }
+  public async sign({ exp, claim }: SignJWTOptions): Promise<string> {
+    return new SignJWT(claim)
+      .setProtectedHeader({ alg: this.signConfig.alg })
+      .setIssuedAt()
+      .setIssuer(this.signConfig.issuer)
+      .setExpirationTime(exp ?? this.signConfig.exp)
+      .sign(this.secret);
   }
 
   public async verify<T extends JWTPayload>(

@@ -5,7 +5,6 @@ import type {
   ApiHandlerResponse,
 } from '~/libs/packages/controller/libs/types/types.js';
 import { HttpCode, HttpMethod } from '~/libs/packages/http/http.js';
-import { jwt } from '~/libs/packages/jwt/jwt.js';
 import type { LoggerService } from '~/libs/packages/logger/logger.js';
 import type {
   UserSignInRequestDto,
@@ -15,11 +14,15 @@ import type {
 } from '~/packages/users/users.js';
 import { userSignInValidationSchema } from '~/packages/users/users.js';
 
+import { type AuthService } from './auth.service.js';
 import { AuthApiPath } from './libs/enums/enums.js';
 
 class AuthController extends Controller {
-  public constructor(logger: LoggerService) {
+  private authService: AuthService;
+
+  public constructor(logger: LoggerService, authService: AuthService) {
     super(logger, ApiPath.AUTH);
+    this.authService = authService;
 
     this.addRoute({
       path: AuthApiPath.SIGN_IN,
@@ -60,52 +63,27 @@ class AuthController extends Controller {
   private async signIn(
     options: ApiHandlerOptions<{ body: UserSignInRequestDto }>,
   ): Promise<ApiHandlerResponse<UserSignInResponseDto>> {
-    const token = await jwt.sign({ claim: { userId: 1 } });
-    const mockResponse: UserSignUpResponseDto = {
-      token: token ?? 'ew.. some error',
-      user: {
-        createdAt: new Date(),
-        email: options.body.email,
-        firstName: 'lol',
-        lastName: 'kek',
-        id: 1,
-        updatedAt: new Date(),
-      },
-    };
-
     return {
       status: HttpCode.OK,
-      payload: mockResponse,
+      payload: await this.authService.signIn(options.body),
     };
   }
 
   private async signUp(
     options: ApiHandlerOptions<{ body: UserSignUpRequestDto }>,
   ): Promise<ApiHandlerResponse<UserSignUpResponseDto>> {
-    const mockResponse: UserSignUpResponseDto = {
-      token: 'To-be-continued',
-      user: {
-        createdAt: new Date(),
-        email: options.body.email,
-        id: 1,
-        updatedAt: new Date(),
-        firstName: 'lol',
-        lastName: 'kek',
-      },
-    };
-
     return {
-      status: HttpCode.OK,
-      payload: mockResponse,
+      status: HttpCode.CREATED,
+      payload: await this.authService.signUp(options.body),
     };
   }
 
   private async getAuthenticatedUser(
-    _options: ApiHandlerOptions,
+    options: ApiHandlerOptions,
   ): Promise<ApiHandlerResponse> {
     return {
       status: HttpCode.OK,
-      payload: _options.user,
+      payload: options.user,
     };
   }
 }
