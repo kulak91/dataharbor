@@ -1,19 +1,11 @@
 import { ApiPath } from '~/libs/enums/enums.js';
 import { Controller } from '~/libs/packages/controller/controller.package.js';
-import type {
-  ApiHandlerOptions,
-  ApiHandlerResponse,
-} from '~/libs/packages/controller/libs/types/types.js';
+import type { ApiHandlerResponse } from '~/libs/packages/controller/libs/types/types.js';
 import { HttpCode, HttpMethod } from '~/libs/packages/http/http.js';
 import type { LoggerService } from '~/libs/packages/logger/logger.js';
-import type {
-  UserAuthResponseDto,
-  UserSignInRequestDto,
-  UserSignInResponseDto,
-  UserSignUpRequestDto,
-  UserSignUpResponseDto,
-} from '~/packages/users/users.js';
-import { UserModel } from './user.model.js';
+
+import { User } from './user.model.js';
+import { UserDetails } from './user-details.model.js';
 
 class UserController extends Controller {
   public constructor(logger: LoggerService) {
@@ -36,25 +28,70 @@ class UserController extends Controller {
     //   updatedAt: new Date(),
     // };
     // const test = await UserModel.findAll();
-    const test = await UserModel.findOne({
+
+    const user = await User.findOne({
       where: { email: 'tes10t@email.com' },
+      include: UserDetails,
     });
-    console.log('test');
+    console.log('user', user);
+    if (!user) {
+      return {
+        status: HttpCode.OK,
+        payload: {},
+      };
+    }
 
-    const created = {};
+    if (!user.details) {
+      // UserDetails are null, create new details
+      const userDetails = {
+        // Set the user details here
+        firstName: 'Admin',
+        lastName: 'Adminich',
+        userId: user.id,
+      };
 
-    // const created = await UserModel.create({
+      // Create the user details
+      const createdDetails = await UserDetails.create(userDetails, {
+        include: User,
+      });
+      console.log('User details created:', createdDetails);
+      return {
+        status: HttpCode.OK,
+        payload: { createdDetails },
+      };
+    } else {
+      // UserDetails exist, update them as needed
+      const updatedDetails = {
+        // Set the updated user details here
+        firstName: 'UpdatedName1',
+      };
+
+      // Update the user details
+      const upd = await UserDetails.update(updatedDetails, {
+        where: { userId: user.id },
+        returning: true,
+      });
+      console.log('User details updated', upd);
+      return {
+        status: HttpCode.OK,
+        payload: { upd, user },
+      };
+    }
+
+    // const created = {};
+
+    // const user = await User.create({
     //   email: 'tes10t@email.com',
     //    passwordHash: 'some hash',
     //    passwordSalt: 'some salt',
     // });
 
-    console.log('created', created);
+    // console.log('user', user);
 
-    return {
-      status: HttpCode.OK,
-      payload: { test, created },
-    };
+    // return {
+    //   status: HttpCode.OK,
+    //   payload: { test },
+    // };
   }
 }
 
