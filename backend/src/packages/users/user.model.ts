@@ -25,10 +25,14 @@ User.init(
 User.hasOne(UserDetails, {
   foreignKey: 'userId',
   as: 'details',
+  foreignKeyConstraints: true,
+  hooks: true,
 });
 
 UserDetails.belongsTo(User, {
   foreignKey: 'userId',
+  as: 'details',
+  hooks: true,
 });
 
 export { User };

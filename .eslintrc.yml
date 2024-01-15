@@ -75,6 +75,7 @@ rules:
   '@typescript-eslint/quotes':
     - error
     - single
+    - avoidEscape: true
   '@typescript-eslint/consistent-type-imports':
     - error
   '@typescript-eslint/consistent-type-exports':
