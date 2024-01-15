@@ -1,5 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { ExceptionMessage } from 'shared/build/index.js';
 
+import type { HttpError } from '~/libs/packages/http/http.js';
 import { StorageKey } from '~/libs/packages/storage/storage.js';
 import { type AsyncThunkConfig } from '~/libs/types/types.js';
 import {
@@ -56,7 +58,10 @@ const getAuthenticatedUser = createAsyncThunk<
 
   try {
     return await authApi.getAuthenticatedUser();
-  } catch {
+  } catch (err) {
+    if ((err as HttpError).message === ExceptionMessage.JWT_EXPIRED) {
+      console.log('Refresh token needed');
+    }
     await storage.delete(StorageKey.TOKEN);
     return null;
   }

@@ -15,7 +15,7 @@ type AuthMiddlewareOpts = {
 };
 
 const authMiddleware =
-  ({ logger, jwt, userService }: AuthMiddlewareOpts) =>
+  ({ jwt, userService }: AuthMiddlewareOpts) =>
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { headers, path, method } = req;
     if (isWhiteRoute({ path, method })) {
@@ -43,7 +43,13 @@ const authMiddleware =
 
       req.user = authorizedUser;
     } catch (e) {
-      logger.error('Error in auth midleware', { e });
+      if (e instanceof AuthError) {
+        return next(
+          new AuthError({
+            message: e.message ?? ExceptionMessage.UNAUTHORIZED_USER,
+          }),
+        );
+      }
       return next(
         new AuthError({
           message: ExceptionMessage.UNAUTHORIZED_USER,
