@@ -4,6 +4,7 @@ import {
   sequelize,
 } from '~/libs/packages/database/database.js';
 
+import { SessionModel } from '../session/session.js';
 import { UserDetails } from './user-details.model.js';
 
 class User extends BaseModel<User> {
@@ -26,6 +27,19 @@ User.hasOne(UserDetails, {
   foreignKey: 'userId',
   as: 'details',
   foreignKeyConstraints: true,
+  hooks: true,
+});
+
+User.hasMany(SessionModel, {
+  foreignKey: 'userId',
+  as: 'session',
+  foreignKeyConstraints: true,
+  hooks: true,
+});
+
+SessionModel.belongsTo(User, {
+  foreignKey: 'userId',
+  as: 'session',
   hooks: true,
 });
 

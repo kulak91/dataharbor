@@ -1,5 +1,6 @@
 import 'express-async-errors';
 
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { type Express, type RequestHandler } from 'express';
 import { validate } from 'express-validation';
@@ -50,6 +51,7 @@ class ServerApp implements ServerApplication {
   }
 
   public async init(): Promise<void> {
+    this.enableProxyTrust();
     this.initMiddlewares();
     this.initRoutes();
     this.initErrorHandler();
@@ -90,6 +92,7 @@ class ServerApp implements ServerApplication {
   }
 
   private initMiddlewares(): void {
+    this.app.use(cookieParser());
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(authMiddleware({ logger: this.logger, jwt, userService }));
@@ -117,6 +120,10 @@ class ServerApp implements ServerApplication {
 
   private initErrorHandler(): void {
     this.app.use(errorHandlerMiddleware(this.logger));
+  }
+
+  private enableProxyTrust(): void {
+    this.app.set('trust proxy', true);
   }
 }
 

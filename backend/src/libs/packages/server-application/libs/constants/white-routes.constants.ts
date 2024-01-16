@@ -13,6 +13,10 @@ const WHITE_ROUTES: WhiteRoute[] = [
     path: `/api/v1${ApiPath.AUTH}${AuthApiPath.SIGN_UP}`,
     methods: [HttpMethod.POST],
   },
+  {
+    path: `/api/v1${ApiPath.AUTH}${AuthApiPath.REFRESH_TOKEN}`,
+    methods: [HttpMethod.POST],
+  },
 ];
 
 export { WHITE_ROUTES };

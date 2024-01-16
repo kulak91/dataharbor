@@ -7,6 +7,7 @@ interface JWTService {
   verify<T extends JWTPayload>(
     token: string,
   ): Promise<JWTVerifyResult<T>['payload']>;
+  decode<T extends JWTPayload>(token: string): JWTVerifyResult<T>['payload'];
 }
 
 export { type JWTService };

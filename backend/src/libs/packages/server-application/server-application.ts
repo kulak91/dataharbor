@@ -1,6 +1,5 @@
 import { config } from '~/libs/packages/config/config.js';
 import { db } from '~/libs/packages/database/database.js';
-import { jwt } from '~/libs/packages/jwt/jwt.js';
 import { logger } from '~/libs/packages/logger/logger.js';
 import { authController } from '~/packages/auth/auth.js';
 import { userController } from '~/packages/users/users.js';

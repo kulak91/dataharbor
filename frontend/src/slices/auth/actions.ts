@@ -1,7 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ExceptionMessage } from 'shared/build/index.js';
 
-import type { HttpError } from '~/libs/packages/http/http.js';
 import { StorageKey } from '~/libs/packages/storage/storage.js';
 import { type AsyncThunkConfig } from '~/libs/types/types.js';
 import {
@@ -44,6 +42,24 @@ const signOut = createAsyncThunk<unknown, undefined, AsyncThunkConfig>(
   },
 );
 
+const refreshToken = createAsyncThunk<
+  UserAuthResponseDto | null,
+  undefined,
+  AsyncThunkConfig
+>(`${sliceName}/refresh-token`, async (_, { extra }) => {
+  const { authApi, storage } = extra;
+
+  try {
+    const { user, token } = await authApi.refreshToken();
+    await storage.set(StorageKey.TOKEN, token);
+
+    return user;
+  } catch {
+    await storage.delete(StorageKey.TOKEN);
+    return null;
+  }
+});
+
 const getAuthenticatedUser = createAsyncThunk<
   UserAuthResponseDto | null,
   undefined,
@@ -56,15 +72,7 @@ const getAuthenticatedUser = createAsyncThunk<
     return null;
   }
 
-  try {
-    return await authApi.getAuthenticatedUser();
-  } catch (err) {
-    if ((err as HttpError).message === ExceptionMessage.JWT_EXPIRED) {
-      console.log('Refresh token needed');
-    }
-    await storage.delete(StorageKey.TOKEN);
-    return null;
-  }
+  return authApi.getAuthenticatedUser();
 });
 
-export { getAuthenticatedUser, signIn, signOut, signUp };
+export { getAuthenticatedUser, refreshToken, signIn, signOut, signUp };

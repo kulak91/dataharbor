@@ -7,6 +7,7 @@ type DefaultApiHandlerOptions = {
   query?: unknown;
   params?: unknown;
   user?: UserAuthResponseDto;
+  client_ip?: Parameters<AppRouteParameters['handler']>[0]['ip'];
 };
 
 type ApiHandlerOptions<
@@ -16,6 +17,7 @@ type ApiHandlerOptions<
   query: T['query'];
   params: T['params'];
   user: T['user'];
+  client_ip: Parameters<AppRouteParameters['handler']>[0]['ip'];
   headers: Parameters<AppRouteParameters['handler']>[0]['headers'];
 };
 

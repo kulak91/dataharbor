@@ -3,7 +3,13 @@ import { createSlice } from '@reduxjs/toolkit';
 import { DataStatus } from '~/libs/enums/enums.js';
 import { type UserAuthResponseDto } from '~/packages/users/users.js';
 
-import { getAuthenticatedUser, signIn, signOut, signUp } from './actions.js';
+import {
+  getAuthenticatedUser,
+  refreshToken,
+  signIn,
+  signOut,
+  signUp,
+} from './actions.js';
 
 type State = {
   authenticatedUser: UserAuthResponseDto | null;
@@ -45,7 +51,17 @@ const { reducer, actions, name } = createSlice({
       state.authenticatedUser = null;
       state.authDataStatus = DataStatus.REJECTED;
     });
-
+    builder.addCase(refreshToken.pending, (state) => {
+      state.authDataStatus = DataStatus.PENDING;
+    });
+    builder.addCase(refreshToken.fulfilled, (state, action) => {
+      state.authenticatedUser = action.payload;
+      state.authDataStatus = DataStatus.FULFILLED;
+    });
+    builder.addCase(refreshToken.rejected, (state) => {
+      state.authenticatedUser = null;
+      state.authDataStatus = DataStatus.REJECTED;
+    });
     builder.addCase(signOut.pending, (state) => {
       state.authDataStatus = DataStatus.PENDING;
     });

@@ -2,6 +2,7 @@ import {
   type errors,
   type JWTPayload,
   type JWTVerifyResult,
+  decodeJwt,
   jwtVerify,
   SignJWT,
 } from 'jose';
@@ -38,6 +39,12 @@ class JWT implements JWTService {
       .sign(this.secret);
   }
 
+  public decode<T extends JWTPayload>(
+    token: string,
+  ): JWTVerifyResult<T>['payload'] {
+    return decodeJwt(token) as JWTVerifyResult<T>['payload'];
+  }
+
   public async verify<T extends JWTPayload>(
     token: string,
   ): Promise<JWTVerifyResult<T>['payload']> {
@@ -57,7 +64,7 @@ class JWT implements JWTService {
       issuer:
         this.config.ENV.APP.PUBLIC_URL ??
         `http://${this.config.ENV.APP.HOST}:${this.config.ENV.APP.PORT}`,
-      exp: '2h',
+      exp: '10secs',
     };
   }
 }

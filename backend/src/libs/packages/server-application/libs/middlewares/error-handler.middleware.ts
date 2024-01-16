@@ -19,7 +19,6 @@ const errorHandlerMiddleware =
     }
     if (err instanceof HttpError) {
       logger.error(`[Http Error]: ${err.status.toString()} – ${err.message}`);
-
       const response: ServerCommonErrorResponse = {
         errorType: ServerErrorType.COMMON,
         message: err.message,
