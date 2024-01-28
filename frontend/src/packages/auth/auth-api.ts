@@ -66,6 +66,18 @@ class AuthApi extends BaseHttpApi {
 
     return response.json<UserAuthResponseDto>();
   }
+
+  public async refreshToken(): Promise<UserSignInResponseDto> {
+    const response = await this.load(
+      this.getFullEndpoint(AuthApiPath.REFRESH_TOKEN, {}),
+      {
+        method: HttpMethod.POST,
+        hasAuth: true,
+      },
+    );
+
+    return response.json<UserSignInResponseDto>();
+  }
 }
 
 export { AuthApi };

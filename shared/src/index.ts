@@ -2,6 +2,7 @@ export {
   ApiPath,
   AppEnvironment,
   ContentType,
+  ExceptionMessage,
   ServerErrorType,
 } from './libs/enums/enums.js';
 export {
@@ -12,7 +13,7 @@ export {
 } from './libs/exceptions/exceptions.js';
 export type { InterpolationParameters } from './libs/helpers/helpers.js';
 export { configureString, interpolate } from './libs/helpers/helpers.js';
-export { type IConfig } from './libs/packages/config/config.js';
+export { type ConfigSchema } from './libs/packages/config/config.js';
 export {
   type Http,
   type HttpOptions,

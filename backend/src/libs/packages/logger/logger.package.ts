@@ -1,8 +1,8 @@
 import { type Logger as TLogger, pino } from 'pino';
 
-import { type ILogger } from './libs/interfaces/interfaces.js';
+import { type LoggerService } from './libs/interfaces/interfaces.js';
 
-class Logger implements ILogger {
+class Logger implements LoggerService {
   private logger: TLogger;
 
   public constructor() {
@@ -16,28 +16,28 @@ class Logger implements ILogger {
   public debug(
     message: string,
     parameters: Record<string, unknown> = {},
-  ): ReturnType<ILogger['debug']> {
+  ): ReturnType<LoggerService['debug']> {
     this.logger.debug(parameters, message);
   }
 
   public error(
     message: string,
     parameters: Record<string, unknown> = {},
-  ): ReturnType<ILogger['error']> {
+  ): ReturnType<LoggerService['error']> {
     this.logger.error(parameters, message);
   }
 
   public info(
     message: string,
     parameters: Record<string, unknown> = {},
-  ): ReturnType<ILogger['info']> {
+  ): ReturnType<LoggerService['info']> {
     this.logger.info(parameters, message);
   }
 
   public warn(
     message: string,
     parameters: Record<string, unknown> = {},
-  ): ReturnType<ILogger['warn']> {
+  ): ReturnType<LoggerService['warn']> {
     this.logger.warn(parameters, message);
   }
 }

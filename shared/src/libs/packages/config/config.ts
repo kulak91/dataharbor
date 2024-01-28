@@ -1,1 +1,1 @@
-export { type IConfig } from './libs/interfaces/interfaces.js';
+export { type ConfigSchema } from './libs/interfaces/interfaces.js';

@@ -5,9 +5,8 @@ import type {
   ApiHandlerResponse,
 } from '~/libs/packages/controller/libs/types/types.js';
 import { HttpCode, HttpMethod } from '~/libs/packages/http/http.js';
-import type { ILogger } from '~/libs/packages/logger/logger.js';
+import type { LoggerService } from '~/libs/packages/logger/logger.js';
 import type {
-  UserAuthResponseDto,
   UserSignInRequestDto,
   UserSignInResponseDto,
   UserSignUpRequestDto,
@@ -15,11 +14,16 @@ import type {
 } from '~/packages/users/users.js';
 import { userSignInValidationSchema } from '~/packages/users/users.js';
 
+import { type AuthService } from './auth.service.js';
 import { AuthApiPath } from './libs/enums/enums.js';
+import { generateCookieValue } from './libs/helpers/helpers.js';
 
 class AuthController extends Controller {
-  public constructor(logger: ILogger) {
+  private authService: AuthService;
+
+  public constructor(logger: LoggerService, authService: AuthService) {
     super(logger, ApiPath.AUTH);
+    this.authService = authService;
 
     this.addRoute({
       path: AuthApiPath.SIGN_IN,
@@ -31,6 +35,7 @@ class AuthController extends Controller {
         return this.signIn(
           options as ApiHandlerOptions<{
             body: UserSignInRequestDto;
+            client_ip: string;
           }>,
         );
       },
@@ -43,8 +48,17 @@ class AuthController extends Controller {
         return this.signUp(
           options as ApiHandlerOptions<{
             body: UserSignUpRequestDto;
+            client_ip: string;
           }>,
         );
+      },
+    });
+
+    this.addRoute({
+      path: AuthApiPath.SIGN_OUT,
+      method: HttpMethod.POST,
+      handler: (options) => {
+        return this.signOut(options as ApiHandlerOptions);
       },
     });
 
@@ -55,59 +69,91 @@ class AuthController extends Controller {
         return this.getAuthenticatedUser(options);
       },
     });
+
+    this.addRoute({
+      path: AuthApiPath.REFRESH_TOKEN,
+      method: HttpMethod.POST,
+      handler: (options) => {
+        return this.refreshToken(options);
+      },
+    });
   }
 
   private async signIn(
-    options: ApiHandlerOptions<{ body: UserSignInRequestDto }>,
+    options: ApiHandlerOptions<{
+      body: UserSignInRequestDto;
+      client_ip: string;
+    }>,
   ): Promise<ApiHandlerResponse<UserSignInResponseDto>> {
-    const mockResponse: UserSignUpResponseDto = {
-      token: 'To-be-continued',
-      user: {
-        createdAt: new Date(),
-        email: options.body.email,
-        id: 1,
-        updatedAt: new Date(),
-      },
-    };
+    const { refreshToken, ...payload } = await this.authService.signIn(
+      options.body,
+      options.client_ip,
+    );
 
     return {
       status: HttpCode.OK,
-      payload: mockResponse,
+      payload,
+      cookie: generateCookieValue({
+        name: 'refresh-token',
+        value: refreshToken,
+      }),
     };
   }
 
   private async signUp(
-    options: ApiHandlerOptions<{ body: UserSignUpRequestDto }>,
+    options: ApiHandlerOptions<{
+      body: UserSignUpRequestDto;
+      client_ip: string;
+    }>,
   ): Promise<ApiHandlerResponse<UserSignUpResponseDto>> {
-    const mockResponse: UserSignUpResponseDto = {
-      token: 'To-be-continued',
-      user: {
-        createdAt: new Date(),
-        email: options.body.email,
-        id: 1,
-        updatedAt: new Date(),
-      },
-    };
-
+    const { refreshToken, ...payload } = await this.authService.signUp(
+      options.body,
+      options.client_ip,
+    );
     return {
-      status: HttpCode.OK,
-      payload: mockResponse,
+      status: HttpCode.CREATED,
+      payload,
+      cookie: generateCookieValue({
+        name: 'refresh-token',
+        value: refreshToken,
+      }),
     };
   }
 
   private async getAuthenticatedUser(
-    _options: unknown,
+    options: ApiHandlerOptions,
   ): Promise<ApiHandlerResponse> {
-    const mockUser: UserAuthResponseDto = {
-      createdAt: new Date(),
-      email: 'any-email@gmail.com',
-      id: 1,
-      updatedAt: new Date(),
-    };
-
     return {
       status: HttpCode.OK,
-      payload: mockUser,
+      payload: options.user,
+    };
+  }
+
+  private async signOut({
+    headers,
+    user,
+  }: ApiHandlerOptions): Promise<ApiHandlerResponse> {
+    await this.authService.signOut({ cookie: headers.cookie, user });
+    return {
+      status: HttpCode.OK,
+      payload: {},
+    };
+  }
+
+  private async refreshToken(
+    options: ApiHandlerOptions,
+  ): Promise<ApiHandlerResponse<UserSignInResponseDto>> {
+    const { refreshToken, ...payload } = await this.authService.refreshToken(
+      options.headers,
+      options.client_ip,
+    );
+    return {
+      status: HttpCode.OK,
+      payload,
+      cookie: generateCookieValue({
+        name: 'refresh-token',
+        value: refreshToken,
+      }),
     };
   }
 }

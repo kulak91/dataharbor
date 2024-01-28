@@ -23,6 +23,8 @@ const userSignUp = joi.object<UserSignUpRequestDto, true>({
     'string.empty': UserValidationMessage.PASSWORD_REQUIRED,
     'sting.min': UserValidationMessage.PASSWORD_MIN_LENGTH,
   }),
+  firstName: joi.string().trim().required(),
+  lastName: joi.string().trim().required(),
 });
 
 export { userSignUp };

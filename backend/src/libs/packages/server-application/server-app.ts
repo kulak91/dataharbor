@@ -1,40 +1,46 @@
+import 'express-async-errors';
+
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import express, {
-  type Express,
-  type NextFunction,
-  type Request,
-  type RequestHandler,
-  type Response,
-} from 'express';
-import { validate, ValidationError } from 'express-validation';
+import express, { type Express, type RequestHandler } from 'express';
+import { validate } from 'express-validation';
 
 import { AppEnvironment } from '~/libs/enums/enums.js';
-import type { IConfig } from '~/libs/packages/config/config.js';
-import type { IDatabase } from '~/libs/packages/database/database.js';
+import type { ConfigSchema } from '~/libs/packages/config/config.js';
+import type { DatabaseService } from '~/libs/packages/database/database.js';
+import { jwt } from '~/libs/packages/jwt/jwt.js';
+import { userService } from '~/packages/users/users.js';
 
-import { HttpCode, HttpMethod } from '../http/http.js';
-import type { ILogger } from '../logger/logger.js';
+import { HttpMethod } from '../http/http.js';
+import type { LoggerService } from '../logger/logger.js';
 import { formatHttpMethod } from './libs/helpers/helpers.js';
-import type { IServerAppApi } from './libs/interfaces/interfaces.js';
-import type { AppRouteParameters } from './libs/types/app-route-parameters.type.js';
+import type {
+  ServerApiDetails,
+  ServerApplication,
+} from './libs/interfaces/interfaces.js';
+import {
+  authMiddleware,
+  errorHandlerMiddleware,
+} from './libs/middlewares/middlewares.js';
+import type { AppRouteParameters } from './libs/types/types.js';
 
 type Constructor = {
-  config: IConfig;
-  logger: ILogger;
-  apis: IServerAppApi[];
-  db: IDatabase;
+  config: ConfigSchema;
+  logger: LoggerService;
+  apis: ServerApiDetails[];
+  db: DatabaseService;
 };
 
-class ServerApp {
-  private config: IConfig;
+class ServerApp implements ServerApplication {
+  private config: ConfigSchema;
 
-  private logger: ILogger;
+  private logger: LoggerService;
 
   private app: Express;
 
-  private apis: IServerAppApi[];
+  private apis: ServerApiDetails[];
 
-  private db: IDatabase;
+  private db: DatabaseService;
 
   public constructor({ config, logger, apis, db }: Constructor) {
     this.config = config;
@@ -45,11 +51,12 @@ class ServerApp {
   }
 
   public async init(): Promise<void> {
+    this.enableProxyTrust();
     this.initMiddlewares();
     this.initRoutes();
     this.initErrorHandler();
 
-    this.db.connect();
+    await this.db.init();
 
     const host = this.config.ENV.APP.HOST;
     const port = this.config.ENV.APP.PORT;
@@ -85,8 +92,10 @@ class ServerApp {
   }
 
   private initMiddlewares(): void {
+    this.app.use(cookieParser());
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
+    this.app.use(authMiddleware({ logger: this.logger, jwt, userService }));
 
     this.initCors();
   }
@@ -110,15 +119,11 @@ class ServerApp {
   }
 
   private initErrorHandler(): void {
-    this.app.use(
-      (err: Error, _req: Request, res: Response, _next: NextFunction) => {
-        if (err instanceof ValidationError) {
-          return res.status(err.statusCode).json(err);
-        }
+    this.app.use(errorHandlerMiddleware(this.logger));
+  }
 
-        return res.status(HttpCode.INTERNAL_SERVER_ERROR).json(err);
-      },
-    );
+  private enableProxyTrust(): void {
+    this.app.set('trust proxy', true);
   }
 }
 

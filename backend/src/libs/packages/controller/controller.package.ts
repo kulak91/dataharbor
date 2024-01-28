@@ -1,8 +1,8 @@
 import type { Request, Response } from 'express';
 
-import type { AppRouteParameters } from '~/libs/packages/server-application/libs/types/app-route-parameters.type.js';
+import type { AppRouteParameters } from '~/libs/packages/server-application/server-application.js';
 
-import type { ILogger } from '../logger/logger.js';
+import type { LoggerService } from '../logger/logger.js';
 import type { IController } from './libs/interfaces/interfaces.js';
 import type {
   ApiHandler,
@@ -13,11 +13,11 @@ import type {
 class Controller implements IController {
   private apiUrl: string;
 
-  public logger: ILogger;
+  public logger: LoggerService;
 
   public routes: AppRouteParameters[];
 
-  public constructor(logger: ILogger, apiPath: string) {
+  public constructor(logger: LoggerService, apiPath: string) {
     this.apiUrl = apiPath;
     this.logger = logger;
     this.routes = [];
@@ -40,21 +40,25 @@ class Controller implements IController {
     res: Response,
   ): Promise<void> {
     this.logger.info(`${req.method} on ${req.url}`);
-
     const handlerOptions = this.mapRequest(req);
-    const { status, payload } = await handler(handlerOptions);
+    const { status, payload, cookie } = await handler(handlerOptions);
+
+    if (cookie) {
+      res.cookie(cookie.name, cookie.value, cookie.options);
+    }
 
     res.status(status).send(payload);
-    return;
   }
 
   private mapRequest(req: Request): ApiHandlerOptions {
-    const { body, query, params, headers } = req;
+    const { body, query, params, headers, user, ip } = req;
     return {
       body,
       query,
       params,
       headers,
+      user,
+      client_ip: ip,
     };
   }
 }

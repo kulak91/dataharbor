@@ -42,19 +42,37 @@ const signOut = createAsyncThunk<unknown, undefined, AsyncThunkConfig>(
   },
 );
 
+const refreshToken = createAsyncThunk<
+  UserAuthResponseDto | null,
+  undefined,
+  AsyncThunkConfig
+>(`${sliceName}/refresh-token`, async (_, { extra }) => {
+  const { authApi, storage } = extra;
+
+  try {
+    const { user, token } = await authApi.refreshToken();
+    await storage.set(StorageKey.TOKEN, token);
+
+    return user;
+  } catch {
+    await storage.delete(StorageKey.TOKEN);
+    return null;
+  }
+});
+
 const getAuthenticatedUser = createAsyncThunk<
   UserAuthResponseDto | null,
   undefined,
   AsyncThunkConfig
 >(`${sliceName}/get-authenticated-user`, async (_, { extra }) => {
   const { authApi, storage } = extra;
-  const hasToken = await storage.has(StorageKey.TOKEN);
+  const token = await storage.has(StorageKey.TOKEN);
 
-  if (hasToken) {
-    return authApi.getAuthenticatedUser();
+  if (!token) {
+    return null;
   }
 
-  return null;
+  return authApi.getAuthenticatedUser();
 });
 
-export { getAuthenticatedUser, signIn, signOut, signUp };
+export { getAuthenticatedUser, refreshToken, signIn, signOut, signUp };

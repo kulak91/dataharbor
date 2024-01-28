@@ -1,24 +1,42 @@
-import type { Dialect, Options } from 'sequelize';
-import { Sequelize } from 'sequelize';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-import type { IConfig } from '~/libs/packages/config/config.js';
-import type { ILogger } from '~/libs/packages/logger/logger.js';
+import type { Dialect, Options } from '@sequelize/core';
+import { importModels, Sequelize } from '@sequelize/core';
 
-class Database {
-  private config: IConfig;
+import type { ConfigSchema } from '~/libs/packages/config/config.js';
+import type { LoggerService } from '~/libs/packages/logger/logger.js';
 
-  private logger: ILogger;
+import type { DatabaseService } from './libs/interfaces/interfaces.js';
 
-  private client: Sequelize;
+class Database implements DatabaseService {
+  private config: ConfigSchema;
 
-  public constructor(config: IConfig, logger: ILogger) {
+  private logger: LoggerService;
+
+  private directory: string;
+
+  public client: Sequelize;
+
+  public constructor(config: ConfigSchema, logger: LoggerService) {
     this.config = config;
     this.logger = logger;
+    this.directory = this.directory = dirname(fileURLToPath(import.meta.url));
 
     this.client = new Sequelize(
       this.config.ENV.DB.CONNECTION_STRING,
       this.dbConfig,
     );
+  }
+
+  public async init(): Promise<void> {
+    const models = await importModels(
+      join(this.directory, '../../**/*.model.{ts,js}'),
+    );
+    this.client.addModels(models);
+    this.logger.info('Database models loaded.');
+
+    await this.connect();
   }
 
   public async connect(): Promise<void> {
@@ -33,6 +51,10 @@ class Database {
       pool: {
         max: this.config.ENV.DB.POOL_MAX,
         min: this.config.ENV.DB.POOL_MIN,
+      },
+      define: {
+        timestamps: true,
+        underscored: true,
       },
     };
   }
