@@ -1,5 +1,6 @@
 import { ExceptionMessage } from '~/libs/enums/enums.js';
 import { AuthError } from '~/libs/exceptions/exceptions.js';
+import { type ConfigSchema } from '~/libs/packages/config/config.js';
 import type { ApiHandlerOptions } from '~/libs/packages/controller/controller.js';
 import { type IEncrypt } from '~/libs/packages/encrypt/encrypt.js';
 import { HttpCode, HttpError } from '~/libs/packages/http/http.js';
@@ -23,14 +24,18 @@ class AuthService {
 
   private sessionService: SessionService;
 
+  private config: ConfigSchema;
+
   public constructor(
     userService: UserService,
     sessionService: SessionService,
     encrypt: IEncrypt,
+    config: ConfigSchema,
   ) {
     this.userService = userService;
     this.sessionService = sessionService;
     this.encrypt = encrypt;
+    this.config = config;
   }
 
   public async signUp(
@@ -49,7 +54,7 @@ class AuthService {
     const token = await jwt.sign({ claim: { userId: user.id } });
     const refreshToken = await jwt.sign({
       claim: { userId: user.id },
-      exp: '2h',
+      exp: this.config.AUTH.REFRESH_TOKEN_EXP,
     });
     await this.sessionService.create({ ip, token, userId: user.id });
 
@@ -93,7 +98,13 @@ class AuthService {
       throw new AuthError({ message: ExceptionMessage.UNAUTHORIZED_USER });
     }
 
-    const { userId } = jwt.decode<{ userId: number }>(_token);
+    const _refreshToken = getCookieValue({ cookie, key: 'refresh-token' });
+
+    if (!_refreshToken) {
+      throw new AuthError({ message: ExceptionMessage.UNAUTHORIZED_USER });
+    }
+
+    const { userId } = await jwt.verify<{ userId: number }>(_refreshToken);
     const user = await this.userService.findById(userId);
 
     if (!user) {
@@ -106,7 +117,10 @@ class AuthService {
     await this.sessionService.deleteByUserToken(userId, _token);
 
     const token = await jwt.sign({ claim: { userId } });
-    const refreshToken = await jwt.sign({ claim: { userId }, exp: '2h' });
+    const refreshToken = await jwt.sign({
+      claim: { userId },
+      exp: this.config.AUTH.REFRESH_TOKEN_EXP,
+    });
     await this.sessionService.create({ ip, token, userId });
 
     return { user, token, refreshToken };
@@ -140,8 +154,9 @@ class AuthService {
     const token = await jwt.sign({ claim: { userId: user.id } });
     const refreshToken = await jwt.sign({
       claim: { userId: user.id },
-      exp: '2h',
+      exp: this.config.AUTH.REFRESH_TOKEN_EXP,
     });
+
     await this.sessionService.create({ ip, token, userId: user.id });
 
     return { user, token, refreshToken };
