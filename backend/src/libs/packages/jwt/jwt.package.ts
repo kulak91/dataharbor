@@ -64,7 +64,7 @@ class JWT implements JWTService {
       issuer:
         this.config.ENV.APP.PUBLIC_URL ??
         `http://${this.config.ENV.APP.HOST}:${this.config.ENV.APP.PORT}`,
-      exp: '10secs',
+      exp: this.config.AUTH.ACCESS_TOKEN_EXP,
     };
   }
 }

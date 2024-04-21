@@ -4,10 +4,13 @@ import { AppEnvironment } from '~/libs/enums/enums.js';
 import { type LoggerService } from '~/libs/packages/logger/logger.js';
 
 import { type ConfigSchema } from './libs/interfaces/interfaces.js';
-import { type EnvironmentSchema } from './libs/types/types.js';
+import { type AuthConfig, type EnvironmentSchema } from './libs/types/types.js';
 
 class Config implements ConfigSchema {
   public ENV: EnvironmentSchema;
+
+  public AUTH: AuthConfig;
+
   private logger: LoggerService;
 
   public constructor(logger: LoggerService) {
@@ -19,6 +22,7 @@ class Config implements ConfigSchema {
       output: (message) => this.logger.info(message),
     });
     this.ENV = this.envSchema.getProperties();
+    this.AUTH = this.authConfig;
 
     this.logger.info('.env file successfully parsed.');
   }
@@ -101,6 +105,13 @@ class Config implements ConfigSchema {
         },
       },
     });
+  }
+
+  private get authConfig(): AuthConfig {
+    return {
+      ACCESS_TOKEN_EXP: '10m',
+      REFRESH_TOKEN_EXP: '4w',
+    };
   }
 }
 
